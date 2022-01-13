@@ -9,49 +9,54 @@ public class BetweenTwoSets {
 
     public int find(List<Integer> setA, List<Integer> setB) {
         int count = 0;
-        List<Integer> multipleFactors = new ArrayList<>();
+        List<Integer> multipleFactors = deriveMultipleFactorsOfList(setB);
 
-
-        deriveMultipleFactorsOfList(setB, multipleFactors);
-
-        if(setA.get(0) == 1){
-            return multipleFactors.size() + 1;
+        if (isSizeOfSetAisOneAndValueIsOne(setA)) {
+            return Math.addExact(multipleFactors.size(), setA.get(0));
         }
 
         count = countTheMultipleFactorsBetweenTwoSets(count, multipleFactors, setA);
         return count;
     }
 
-    private int countTheMultipleFactorsBetweenTwoSets(int count, List<Integer> multipleFactors , List<Integer> setA) {
-        boolean isAllNumbersOfSetAFactorOfNumber = true;
-        for(Integer multipleFactor: multipleFactors){
-           for(int number: setA){
-               isAllNumbersOfSetAFactorOfNumber = true;
-               if(!isDivisible(multipleFactor, number)){
-                   isAllNumbersOfSetAFactorOfNumber = false;
-                   break;
-               }
-           }
-            if(isAllNumbersOfSetAFactorOfNumber){
+    private boolean isSizeOfSetAisOneAndValueIsOne(List<Integer> setA) {
+        return setA.size() == 1 && setA.get(0) == 1;
+    }
+
+    private int countTheMultipleFactorsBetweenTwoSets(int count, List<Integer> multiplicationFactorsOfSetB, List<Integer> setA) {
+        for (Integer multiplicationFactorOfSetB : multiplicationFactorsOfSetB) {
+            if (isSetAFactorOfMultiplicationFactorOfSetB(setA, multiplicationFactorOfSetB)) {
                 count++;
             }
         }
         return count;
     }
 
-    private void deriveMultipleFactorsOfList(List<Integer> setB, List<Integer> multipleFactors) {
-        for(int i = 2; i<= setB.get(0); i++){
-            if(divideThroughList(setB,i)){
+    private boolean isSetAFactorOfMultiplicationFactorOfSetB(List<Integer> setA, Integer multiplicationFactorOfSetB) {
+        for (int number : setA) {
+            if (!isDivisible(multiplicationFactorOfSetB, number)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private List<Integer> deriveMultipleFactorsOfList(List<Integer> setB) {
+        List<Integer> multipleFactors = new ArrayList<>();
+        for (int i = 2; i <= setB.get(0); i++) {
+            if (divideThroughList(setB, i)) {
                 multipleFactors.add(i);
             }
         }
         Collections.sort(multipleFactors);
         Collections.reverse(multipleFactors);
+
+        return multipleFactors;
     }
 
     private boolean divideThroughList(List<Integer> numbers, int divisor) {
-        for(Integer number: numbers){
-            if(number % divisor != 0){
+        for (Integer number : numbers) {
+            if (number % divisor != 0) {
                 return false;
             }
         }
