@@ -7,44 +7,44 @@ import java.util.List;
 
 public class BetweenTwoSets {
 
-    public int find(List<Integer> setA, List<Integer> setB) {
+    public int find(List<Integer> firstList, List<Integer> secondList) {
         int count = 0;
-        List<Integer> multipleFactors = deriveMultipleFactorsOfList(setB);
+        List<Integer> multipleFactors = deriveMultipleFactorsOfList(secondList);
 
-        if (isSizeOfSetAisOneAndValueIsOne(setA)) {
-            return Math.addExact(multipleFactors.size(), setA.get(0));
+        if (isSizeOfListOneAndValueIsOne(firstList)) {
+            return Math.addExact(multipleFactors.size(), firstList.get(0));
         }
 
-        count = countTheMultipleFactorsBetweenTwoSets(count, multipleFactors, setA);
+        count = countTheFactors(count, multipleFactors, firstList);
         return count;
     }
 
-    private boolean isSizeOfSetAisOneAndValueIsOne(List<Integer> setA) {
-        return setA.size() == 1 && setA.get(0) == 1;
+    private boolean isSizeOfListOneAndValueIsOne(List<Integer> list) {
+        return list.size() == 1 && list.get(0) == 1;
     }
 
-    private int countTheMultipleFactorsBetweenTwoSets(int count, List<Integer> multiplicationFactorsOfSetB, List<Integer> setA) {
-        for (Integer multiplicationFactorOfSetB : multiplicationFactorsOfSetB) {
-            if (isSetAFactorOfMultiplicationFactorOfSetB(setA, multiplicationFactorOfSetB)) {
+    private int countTheFactors(int count, List<Integer> multiplicationFactorsOfSecondList, List<Integer> firstList) {
+        for (Integer multiplicationFactor : multiplicationFactorsOfSecondList) {
+            if (isGivenListAFactorOfGivenNumber(firstList, multiplicationFactor)) {
                 count++;
             }
         }
         return count;
     }
 
-    private boolean isSetAFactorOfMultiplicationFactorOfSetB(List<Integer> setA, Integer multiplicationFactorOfSetB) {
-        for (int number : setA) {
-            if (!isDivisible(multiplicationFactorOfSetB, number)) {
+    private boolean isGivenListAFactorOfGivenNumber(List<Integer> listOfNumbers, Integer number) {
+        for (int numberFromList : listOfNumbers) {
+            if (!isDivisible(number, numberFromList)) {
                 return false;
             }
         }
         return true;
     }
 
-    private List<Integer> deriveMultipleFactorsOfList(List<Integer> setB) {
+    private List<Integer> deriveMultipleFactorsOfList(List<Integer> list) {
         List<Integer> multipleFactors = new ArrayList<>();
-        for (int i = 2; i <= setB.get(0); i++) {
-            if (divideThroughList(setB, i)) {
+        for (int i = 2; i <= list.get(0); i++) {
+            if (isGivenNumberFactorOfList(list, i)) {
                 multipleFactors.add(i);
             }
         }
@@ -54,9 +54,9 @@ public class BetweenTwoSets {
         return multipleFactors;
     }
 
-    private boolean divideThroughList(List<Integer> numbers, int divisor) {
-        for (Integer number : numbers) {
-            if (number % divisor != 0) {
+    private boolean isGivenNumberFactorOfList(List<Integer> listOfNumbers, Integer divisor) {
+        for (int number : listOfNumbers) {
+            if (!isDivisible(number, divisor)) {
                 return false;
             }
         }
